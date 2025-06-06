@@ -1,0 +1,90 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "windows-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/out/${presetName}",
+          "cacheVariables": {
+            "WORKSPACE_DIR": "${sourceDir}",
+            "LIB_CORE_DIR" : "D:/libs/laserbridge/msvc",
+            "install_DIR": "${sourceDir}/out/${presetName}",
+            "CMAKE_PREFIX_PATH": "D:/libs/grpc/Debug",
+            "GRPC_INCLUDE_DIRS": "D:/libs/grpc/Debug/include",
+            "QT6_DIR": "$env{QT_6_DIR}"
+          },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+
+        {
+            "name": "win-msvc-base",
+            "hidden": true,
+            "inherits": "windows-base",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            }
+        },
+        {
+            "name": "x64-debug-msvc",
+            "displayName": "x64 Debug msvc",
+            "inherits": "win-msvc-base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "LIB_TYPE_DIR_NAME": "msvc-debug",
+                "LIB_NAME_SUFFIX": "d",
+                "CMAKE_CXX_FLAGS": "/utf-8",
+                "CMAKE_C_FLAGS": "/utf-8",
+                "CMAKE_BUILD_TYPE":"Debug",
+                "GRPC_LIBS_DIR":"D:/libs/grpc/Debug/lib"
+            }
+        },
+        {
+            "name": "x64-release-msvc",
+            "displayName": "x64 Release msvc",
+            "inherits": "win-msvc-base",
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "LIB_TYPE_DIR_NAME": "msvc-release",
+                "LIB_NAME_SUFFIX": "",
+                "CMAKE_CXX_FLAGS": "/utf-8",
+                "CMAKE_C_FLAGS": "/utf-8",
+                "CMAKE_BUILD_TYPE":"Release",
+                "GRPC_LIBS_DIR":"D:/libs/grpc/Release/lib"
+            }
+        }
+
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc-debug-build",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "x64-debug-msvc",
+            "targets": [
+                "install"
+            ]
+        },
+        {
+            "name": "msvc-release-build",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "x64-release-msvc",
+            "targets": [
+                "install"
+            ]
+        }
+    ]
+}

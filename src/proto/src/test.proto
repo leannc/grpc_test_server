@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+
+service Test {
+  rpc TimeConsumingMethod(TimeConsumingRequest) returns (TimeConsumingResponse) {}
+}
+
+message TimeConsumingRequest {
+  string command = 1;       
+  bytes data = 2;           
+}
+
+message TimeConsumingResponse {
+  int32 status = 1;
+  string message = 2;         
+  bytes result = 3;
+}
+
+
+
+
