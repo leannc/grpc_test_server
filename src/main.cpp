@@ -9,9 +9,14 @@ using grpc::ServerBuilder;
 using grpc::ServerContext;
 
 int main() {
-  std::string server_address("0.0.0.0:50051");
-  TestService server;
-  // ServerBuilder builder;
+  std::string server_address("0.0.0.0:2105");
+  TestService service;
+  ServerBuilder builder;
+  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  builder.RegisterService(&service);
+
+  auto server = std::move(builder.BuildAndStart());
+  server->Wait();
 
   std::cout << "Hello, World!" << std::endl;
   return 0;
