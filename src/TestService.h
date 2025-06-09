@@ -12,4 +12,6 @@ class TestService : public Test::CallbackService {
   ::grpc::ServerUnaryReactor* TimeConsumingMethod(::grpc::CallbackServerContext* context,
                                                   const ::TimeConsumingRequest* request,
                                                   ::TimeConsumingResponse* response) override;
+  ::grpc::ServerWriteReactor<::Shape>* GetShapes(::grpc::CallbackServerContext* context,
+                                                 const ::SceneID* request) override;
 };

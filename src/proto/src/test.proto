@@ -3,6 +3,7 @@ syntax = "proto3";
 
 service Test {
   rpc TimeConsumingMethod(TimeConsumingRequest) returns (TimeConsumingResponse) {}
+  rpc GetShapes(SceneID) returns (stream Shape) {}
 }
 
 message TimeConsumingRequest {
@@ -17,5 +18,14 @@ message TimeConsumingResponse {
 }
 
 
+message Shape {
+  string type = 1;           // e.g., "circle", "square"
+  repeated float dimensions = 2; // e.g., radius for circle, side lengths for square
+  string color = 3;          // e.g., "red", "blue"
+}
 
+
+message SceneID {
+  int32 id=1;
+}
 
