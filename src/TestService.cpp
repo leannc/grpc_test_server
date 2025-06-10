@@ -1,5 +1,5 @@
 #include "TestService.h"
-static int i = 0;
+
 ::grpc::ServerUnaryReactor* TestService::TimeConsumingMethod(::grpc::CallbackServerContext* context,
                                                              const ::TimeConsumingRequest* request,
                                                              ::TimeConsumingResponse* response) {
@@ -15,7 +15,17 @@ static int i = 0;
                                                             const ::SceneID* request) {
   class ShapeWriter : public ::grpc::ServerWriteReactor<::Shape> {
    public:
-    explicit ShapeWriter() { NextWrite(); }
+    explicit ShapeWriter() {
+      for (int i = 0; i < 10; i++) {
+        ::Shape shape;
+        shape.set_type("circle");
+        shape.add_dimensions(10);
+        shape.set_color("red");
+        shapes_.push_back(shape);
+      }
+      it_ = shapes_.begin();
+      NextWrite();
+    }
 
     void OnDone() override { delete this; }
 
@@ -35,14 +45,17 @@ static int i = 0;
 
    private:
     void NextWrite() {
-      while (i++ < 5) {
-        ::Shape* shape = new ::Shape();
-        shape->set_type("circle");
-        StartWrite(shape);
+      while (it_ != shapes_.end()) {
+        ::Shape& shape = *it_++;
+        StartWrite(&shape);
         return;
       }
       Finish(::grpc::Status::OK);
     }
+
+   private:
+    std::vector<::Shape> shapes_;
+    std::vector<::Shape>::iterator it_;
   };
   return new ShapeWriter();
 }
