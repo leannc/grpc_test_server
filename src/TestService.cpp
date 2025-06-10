@@ -27,7 +27,10 @@
       NextWrite();
     }
 
-    void OnDone() override { delete this; }
+    void OnDone() override {
+      std::cout << "【" << std::this_thread::get_id() << "】" << "====== done" << std::endl;
+      delete this;
+    }
 
     void OnCancel() override {
       std::cout << "【" << std::this_thread::get_id() << "】" << "shape writer has been cancelled" << std::endl;
