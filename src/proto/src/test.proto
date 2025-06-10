@@ -4,11 +4,22 @@ syntax = "proto3";
 service Test {
   rpc TimeConsumingMethod(TimeConsumingRequest) returns (TimeConsumingResponse) {}
   rpc GetShapes(SceneID) returns (stream Shape) {}
+  rpc MachineStatus(stream MachineStatusRequest) returns (stream MachineStatusResponse) {}
+}
+
+message MachineStatusRequest {
+  int32 machine_id = 1;
+}
+
+message MachineStatusResponse {
+  int32 machine_id = 1;
+  string status = 2;
+  repeated string logs = 3;
 }
 
 message TimeConsumingRequest {
-  string command = 1;       
-  bytes data = 2;           
+  string command = 1;
+  bytes data = 2;
 }
 
 message TimeConsumingResponse {
